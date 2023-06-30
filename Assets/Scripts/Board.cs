@@ -22,11 +22,16 @@ public class Board : MonoBehaviour {
     public GameObject[,] allDots;
     public Dot currentDot;
     private FindMatches findMatches;
-
+    public int basePieceValue = 20;
+    private int streakValue = 1;
+    private ScoreManager scoreManager;
+    private SoundManager soundManager;
 
 
 	// Use this for initialization
 	void Start () {
+        soundManager = FindObjectOfType<SoundManager>();
+        scoreManager = FindObjectOfType<ScoreManager>();
         findMatches = FindObjectOfType<FindMatches>();
         allTiles = new BackgroundTile[width, height];
         allDots = new GameObject[width, height];
@@ -37,7 +42,8 @@ public class Board : MonoBehaviour {
         for (int i = 0; i < width; i ++){
             for (int j = 0; j < height; j ++){
                 Vector2 tempPosition = new Vector2(i, j + offSet);
-                GameObject backgroundTile = Instantiate(tilePrefab, tempPosition,Quaternion.identity) as GameObject;
+                Vector2 tilePosition = new Vector2(i, j);
+                GameObject backgroundTile = Instantiate(tilePrefab, tilePosition,Quaternion.identity) as GameObject;
                 backgroundTile.transform.parent = this.transform;
                 backgroundTile.name = "( " + i + ", " + j + " )";
 
@@ -97,12 +103,16 @@ public class Board : MonoBehaviour {
             if(findMatches.currentMatches.Count == 4 || findMatches.currentMatches.Count == 7){
                 findMatches.CheckBombs();
             }
-
+            if(soundManager != null)
+            {
+                soundManager.PlayRandomDestroyNoise();
+            }
             GameObject particle = Instantiate(destroyParticle, 
                                               allDots[column, row].transform.position, 
                                               Quaternion.identity);
             Destroy(particle, .5f);
             Destroy(allDots[column, row]);
+            scoreManager.IncreaseScore(basePieceValue * streakValue);
             allDots[column, row] = null;
         }
     }
@@ -171,6 +181,7 @@ public class Board : MonoBehaviour {
         yield return new WaitForSeconds(.5f);
 
         while(MatchesOnBoard()){
+            streakValue ++;
             yield return new WaitForSeconds(.5f);
             DestroyMatches();
         }
@@ -178,6 +189,7 @@ public class Board : MonoBehaviour {
         currentDot = null;
         yield return new WaitForSeconds(.5f);
         currentState = GameState.move;
+        streakValue = 1;
 
     }
 

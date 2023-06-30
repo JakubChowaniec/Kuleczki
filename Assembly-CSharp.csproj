@@ -58,6 +58,8 @@
      <Compile Include="Assets\Scripts\DestroyParticle.cs" />
      <Compile Include="Assets\Scripts\Dot.cs" />
      <Compile Include="Assets\Scripts\FindMatches.cs" />
+     <Compile Include="Assets\Scripts\ScoreManager.cs" />
+     <Compile Include="Assets\Scripts\SoundManager.cs" />
      <Compile Include="Assets\Scripts\SwipeController.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2017.3.0f3/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
