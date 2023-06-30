@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class FadePanelController : MonoBehaviour {
 
-	
+	public Animator panelAnim;
+
+	public void GameOver()
+	{
+		panelAnim.SetBool("Out", false);
+		panelAnim.SetBool("Game Over", true);
+	}
+
 
 	IEnumerator GameStartCo()
 	{

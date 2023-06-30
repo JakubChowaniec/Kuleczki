@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -65,10 +65,10 @@ public class EndGameManager : MonoBehaviour {
 	}
 
 
-	/*public void WinGame()
+	*//*public void WinGame()
 	{
 
-	}*/
+	}*//*
 
 	public void LoseGame()
 	{
@@ -77,6 +77,8 @@ public class EndGameManager : MonoBehaviour {
         Debug.Log("You Lose!");
         currentCounterValue = 0;
         counter.text = "" + currentCounterValue;
+		FadePanelController fade = FindObjectOfType<FadePanelController>();
+		/fade.GameOver();
     }
 
 	// Update is called once per frame
@@ -92,3 +94,4 @@ public class EndGameManager : MonoBehaviour {
 		}
 	}
 }
+*/

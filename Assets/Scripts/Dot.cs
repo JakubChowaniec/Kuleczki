@@ -13,7 +13,7 @@ public class Dot : MonoBehaviour {
     public int targetY;
     public bool isMatched = false;
 
-    private EndGameManager endGameManager;
+    //private EndGameManager endGameManager;  //Nie używane
     private FindMatches findMatches;
     private Board board;
     public GameObject otherDot;
@@ -40,7 +40,7 @@ public class Dot : MonoBehaviour {
         isColumnBomb = false;
         isRowBomb = false;
 
-        endGameManager = FindObjectOfType<EndGameManager>();
+        //endGameManager = FindObjectOfType<EndGameManager>();
         board = FindObjectOfType<Board>();
         findMatches = FindObjectOfType<FindMatches>();
         //targetX = (int)transform.position.x;
@@ -134,13 +134,13 @@ public class Dot : MonoBehaviour {
                 board.currentDot = null;
                 board.currentState = GameState.move;
             }else{
-                if(endGameManager != null)
+                /*if(endGameManager != null)
                 {
                     if(endGameManager.requirements.gameType == GameType.Moves)
                     {
                         endGameManager.DecreaseCouterValue();
                     }
-                }
+                }*/
                 board.DestroyMatches();
 
             }
