@@ -4,59 +4,61 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PauseManager : MonoBehaviour {
+public class PauseManager : MonoBehaviour
+{
 
-	public GameObject pausePanel;
-	private Board board;
-	public bool paused = false;
-	public Image soundButton;
-	public Sprite musicOnSprite; // if sound == 0  mute; == 1 unmute
-	public Sprite musicOffSprite;
+    public GameObject pausePanel;
+    private Board board;
+    public bool paused = false;
+    public Image soundButton;
+    public Sprite musicOnSprite; // if sound == 0  mute; == 1 unmute
+    public Sprite musicOffSprite;
 
-	// Use this for initialization
-	void Start () {
-        pausePanel.SetActive(false);
+    // Use this for initialization
+    void Start()
+    {
         if (PlayerPrefs.HasKey("Sound"))
-		{
-			if(PlayerPrefs.GetInt("Sound") == 0)
-			{
-				soundButton.sprite = musicOffSprite;
-			}
+        {
+            if (PlayerPrefs.GetInt("Sound") == 0)
+            {
+                soundButton.sprite = musicOffSprite;
+            }
             else
             {
-				soundButton.sprite = musicOnSprite;
+                soundButton.sprite = musicOnSprite;
             }
         }
-		else
-		{
-			soundButton.sprite = musicOnSprite;
-		}
-		
-		board = GameObject.FindWithTag("Board").GetComponent<Board>(); ;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(paused && !pausePanel.activeInHierarchy)
-		{
-			pausePanel.SetActive(true);
-			board.currentState = GameState.pause;  
-		}
-		if(!paused && pausePanel.activeInHierarchy)
-		{
-			pausePanel.SetActive(false);
-			board.currentState = GameState.move;
-		}
-	}
+        else
+        {
+            soundButton.sprite = musicOnSprite;
+        }
+        pausePanel.SetActive(false);
+        board = GameObject.FindWithTag("Board").GetComponent<Board>(); ;
+    }
 
-	public void SoundButton()
-	{
+    // Update is called once per frame
+    void Update()
+    {
+        if (paused && !pausePanel.activeInHierarchy)
+        {
+            pausePanel.SetActive(true);
+            board.currentState = GameState.pause;
+        }
+        if (!paused && pausePanel.activeInHierarchy)
+        {
+            pausePanel.SetActive(false);
+            board.currentState = GameState.move;
+        }
+    }
+
+    public void SoundButton()
+    {
         if (PlayerPrefs.HasKey("Sound"))
         {
             if (PlayerPrefs.GetInt("Sound") == 0)
             {
                 soundButton.sprite = musicOnSprite;
-				PlayerPrefs.SetInt("Sound", 1);
+                PlayerPrefs.SetInt("Sound", 1);
             }
             else
             {
@@ -71,13 +73,13 @@ public class PauseManager : MonoBehaviour {
         }
     }
 
-	public void PauseGame()
-	{
-		paused = !paused;
-	}
+    public void PauseGame()
+    {
+        paused = !paused;
+    }
 
-	public void ExitGame()
-	{
-		SceneManager.LoadScene(0);
-	}
+    public void ExitGame()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

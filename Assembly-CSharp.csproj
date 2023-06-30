@@ -57,6 +57,8 @@
      <Compile Include="Assets\Scripts\CameraScalar.cs" />
      <Compile Include="Assets\Scripts\DestroyParticle.cs" />
      <Compile Include="Assets\Scripts\Dot.cs" />
+     <Compile Include="Assets\Scripts\EndGameManager.cs" />
+     <Compile Include="Assets\Scripts\FadePanelController.cs" />
      <Compile Include="Assets\Scripts\FindMatches.cs" />
      <Compile Include="Assets\Scripts\PauseManager.cs" />
      <Compile Include="Assets\Scripts\SceneSwitcher.cs" />

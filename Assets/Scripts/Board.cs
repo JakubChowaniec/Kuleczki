@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState{
+public enum GameState
+{
+    wait,
+    win,
+    lose,
     pause,
     move
 }
@@ -22,7 +26,8 @@ public class TileType
     public TileKind tileKind;
 }
 
-public class Board : MonoBehaviour {
+public class Board : MonoBehaviour
+{
 
 
     public GameState currentState = GameState.move;
@@ -43,16 +48,18 @@ public class Board : MonoBehaviour {
     private SoundManager soundManager;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         soundManager = FindObjectOfType<SoundManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
         findMatches = FindObjectOfType<FindMatches>();
         blankSpaces = new bool[width, height];
         allDots = new GameObject[width, height];
         SetUp();
-	}
-	
+        currentState = GameState.move;
+    }
+
     public void GenerateBlankSpaces()
     {
         for (int i = 0; i < boardLayout.Length; i++)
@@ -63,13 +70,16 @@ public class Board : MonoBehaviour {
             }
         }
     }
-        
 
-    private void SetUp(){
+
+    private void SetUp()
+    {
         GenerateBlankSpaces();
-        for (int i = 0; i < width; i ++){
-            for (int j = 0; j < height; j ++){
-            if (!blankSpaces[i, j])
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (!blankSpaces[i, j])
                 {
                     Vector2 tempPosition = new Vector2(i, j + offSet);
                     Vector2 tilePosition = new Vector2(i, j);
@@ -82,11 +92,11 @@ public class Board : MonoBehaviour {
                     int maxIterations = 0;
 
                     while (MatchesAt(i, j, dots[dotToUse]) && maxIterations < 100)
-                        {
-                            dotToUse = Random.Range(0, dots.Length);
-                            maxIterations++;
-                            Debug.Log(maxIterations);
-                        }
+                    {
+                        dotToUse = Random.Range(0, dots.Length);
+                        maxIterations++;
+                        Debug.Log(maxIterations);
+                    }
                     maxIterations = 0;
 
                     GameObject dot = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
@@ -101,11 +111,13 @@ public class Board : MonoBehaviour {
         }
     }
 
-    private bool MatchesAt(int column, int row, GameObject piece){
-        if (column > 1 && row > 1) {
+    private bool MatchesAt(int column, int row, GameObject piece)
+    {
+        if (column > 1 && row > 1)
+        {
             if (allDots[column - 1, row] != null && allDots[column - 2, row] != null)
-            { 
-                if (allDots[column - 1, row].tag == piece.tag && allDots[column - 2, row].tag == piece.tag) 
+            {
+                if (allDots[column - 1, row].tag == piece.tag && allDots[column - 2, row].tag == piece.tag)
                 {
                     return true;
                 }
@@ -119,8 +131,11 @@ public class Board : MonoBehaviour {
                 }
             }
 
-        }else if(column <= 1 || row <= 1){
-            if(row > 1){
+        }
+        else if (column <= 1 || row <= 1)
+        {
+            if (row > 1)
+            {
                 if (allDots[column, row - 1] != null && allDots[column, row - 2] != null)
                 {
                     if (allDots[column, row - 1].tag == piece.tag && allDots[column, row - 2].tag == piece.tag)
@@ -144,18 +159,21 @@ public class Board : MonoBehaviour {
         return false;
     }
 
-    private void DestroyMatchesAt(int column, int row){
-        if(allDots[column, row].GetComponent<Dot>().isMatched){
+    private void DestroyMatchesAt(int column, int row)
+    {
+        if (allDots[column, row].GetComponent<Dot>().isMatched)
+        {
             //How many elements are in the matched pieces list from findmatches?
-            if(findMatches.currentMatches.Count == 4 || findMatches.currentMatches.Count == 7){
+            if (findMatches.currentMatches.Count == 4 || findMatches.currentMatches.Count == 7)
+            {
                 findMatches.CheckBombs();
             }
-            if(soundManager != null)
+            if (soundManager != null)
             {
                 soundManager.PlayRandomDestroyNoise();
             }
-            GameObject particle = Instantiate(destroyParticle, 
-                                              allDots[column, row].transform.position, 
+            GameObject particle = Instantiate(destroyParticle,
+                                              allDots[column, row].transform.position,
                                               Quaternion.identity);
             Destroy(particle, .5f);
             Destroy(allDots[column, row]);
@@ -164,11 +182,15 @@ public class Board : MonoBehaviour {
         }
     }
 
-    public void DestroyMatches(){
-        for (int i = 0; i < width; i ++){
-            for (int j = 0; j < height; j++){
-                if (allDots[i, j] != null){
-                    
+    public void DestroyMatches()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] != null)
+                {
+
                     DestroyMatchesAt(i, j);
                 }
             }
@@ -179,22 +201,22 @@ public class Board : MonoBehaviour {
 
     private IEnumerator DecreaseRowCo2()
     {
-        for(int i = 0; i < width; i++)
+        for (int i = 0; i < width; i++)
         {
-            for(int j = 0; j < height; j++) //if the current spot inst blank and is epmty...
+            for (int j = 0; j < height; j++) //if the current spot inst blank and is epmty...
             {
-                if (!blankSpaces[i,j] && allDots[i,j] ==null)
+                if (!blankSpaces[i, j] && allDots[i, j] == null)
                 {
                     //loop from the space above to the top of the column
-                    for(int k = j + 1; k < height; k++)
+                    for (int k = j + 1; k < height; k++)
                     {
                         //if the dot is found
-                        if (allDots[i,k] != null)
+                        if (allDots[i, k] != null)
                         {
                             //move tha dot to empyt space
                             allDots[i, k].GetComponent<Dot>().row = j;
                             //set that spot to be null
-                            allDots[i,k] = null;
+                            allDots[i, k] = null;
                             //break out of the look
                             break;
                         }
@@ -206,13 +228,19 @@ public class Board : MonoBehaviour {
         StartCoroutine(FillBoardCo());
     }
 
-    private IEnumerator DecreaseRowCo(){
+    private IEnumerator DecreaseRowCo()
+    {
         int nullCount = 0;
-        for (int i = 0; i < width; i ++){
-            for (int j = 0; j < height; j ++){
-                if(allDots[i, j] == null){
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] == null)
+                {
                     nullCount++;
-                }else if(nullCount > 0){
+                }
+                else if (nullCount > 0)
+                {
                     allDots[i, j].GetComponent<Dot>().row -= nullCount;
                     allDots[i, j] = null;
                 }
@@ -223,10 +251,14 @@ public class Board : MonoBehaviour {
         StartCoroutine(FillBoardCo());
     }
 
-    private void RefillBoard(){
-        for (int i = 0; i < width; i ++){
-            for (int j = 0; j < height; j ++){
-                if(allDots[i, j] == null && !blankSpaces[i,j]){
+    private void RefillBoard()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] == null && !blankSpaces[i, j])
+                {
                     Vector2 tempPosition = new Vector2(i, j + offSet);
                     int dotToUse = Random.Range(0, dots.Length);
                     GameObject piece = Instantiate(dots[dotToUse], tempPosition, Quaternion.identity);
@@ -239,11 +271,16 @@ public class Board : MonoBehaviour {
         }
     }
 
-    private bool MatchesOnBoard(){
-        for (int i = 0; i < width; i ++){
-            for (int j = 0; j < height; j ++){
-                if(allDots[i, j]!= null){
-                    if(allDots[i, j].GetComponent<Dot>().isMatched){
+    private bool MatchesOnBoard()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if (allDots[i, j] != null)
+                {
+                    if (allDots[i, j].GetComponent<Dot>().isMatched)
+                    {
                         return true;
                     }
                 }
@@ -252,25 +289,26 @@ public class Board : MonoBehaviour {
         return false;
     }
 
-    private IEnumerator FillBoardCo(){
+    private IEnumerator FillBoardCo()
+    {
         RefillBoard();
         yield return new WaitForSeconds(.5f);
 
-        while(MatchesOnBoard()){
-            streakValue ++;
+        while (MatchesOnBoard())
+        {
+            streakValue++;
             DestroyMatches();
             yield return new WaitForSeconds(.5f);
-           
+
         }
         findMatches.currentMatches.Clear();
         currentDot = null;
         yield return new WaitForSeconds(.5f);
-       /* if(IsDeadlocked())
-        {
-            Debug.Log("Deadlocked!!!");
-        }*/
-       if(currentState != GameState.pause)
-            currentState = GameState.move;
+        /* if(IsDeadlocked())
+         {
+             Debug.Log("Deadlocked!!!");
+         }*/
+        currentState = GameState.move;
         streakValue = 1;
 
     }
