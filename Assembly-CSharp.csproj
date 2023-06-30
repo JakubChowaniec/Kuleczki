@@ -58,6 +58,8 @@
      <Compile Include="Assets\Scripts\DestroyParticle.cs" />
      <Compile Include="Assets\Scripts\Dot.cs" />
      <Compile Include="Assets\Scripts\FindMatches.cs" />
+     <Compile Include="Assets\Scripts\PauseManager.cs" />
+     <Compile Include="Assets\Scripts\SceneSwitcher.cs" />
      <Compile Include="Assets\Scripts\ScoreManager.cs" />
      <Compile Include="Assets\Scripts\SoundManager.cs" />
      <Compile Include="Assets\Scripts\SwipeController.cs" />
